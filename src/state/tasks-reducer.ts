@@ -15,8 +15,7 @@ export const taskReducer = (state: Array<TasksStateType>, action: ActionsType) =
     switch (action.type) {
         case '':
             return state
-        case '':
-            return state
+
 
 
         default:
@@ -25,7 +24,7 @@ export const taskReducer = (state: Array<TasksStateType>, action: ActionsType) =
 }
 
 export const removeTaskAC = (taskId: string,  todolistId: string): RemoveTaskActionType => {
-    return { type: 'REMOVE_TASK', taskId, todoListId} as const
+    return { type: 'REMOVE-TASK', taskId, todoListId} as const
 }
 export const addTaskC = (title: string): AddTaskActionType => {
     return { type: ''}
