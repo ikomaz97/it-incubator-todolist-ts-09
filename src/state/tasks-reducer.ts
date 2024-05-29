@@ -1,31 +1,47 @@
-import {FilterValuesType, TasksStateType, TodolistType} from '../App';
-import {v1} from 'uuid';
+import { v1 } from 'uuid';
+import { FilterValuesType, TasksStateType, TodolistType } from '../App';
 
+// Define action types
 export type RemoveTaskActionType = {
-    type: ''
-}
-export type AddTaskActionType = {
-    type: ''
+    type: 'REMOVE-TASK',
+    taskId: string,
+    todoListId: string
 }
 
+export type AddTaskActionType = {
+    type: 'ADD-TASK',
+    title: string,
+    todoListId: string
+}
 
 type ActionsType = RemoveTaskActionType | AddTaskActionType;
 
-export const taskReducer = (state: Array<TasksStateType>, action: ActionsType) => {
+// Action creators
+export const removeTaskAC = (taskId: string, todoListId: string): RemoveTaskActionType => {
+    return { type: 'REMOVE-TASK', taskId, todoListId };
+}
+
+export const addTaskAC = (title: string, todoListId: string): AddTaskActionType => {
+    return { type: 'ADD-TASK', title, todoListId };
+}
+
+// Reducer
+export const taskReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
     switch (action.type) {
-        case '':
-            return state
-
-
-
+        case 'REMOVE-TASK': {
+            return {
+                ...state,
+                [action.todoListId]: state[action.todoListId].filter(task => task.id !== action.taskId)
+            };
+        }
+        case 'ADD-TASK': {
+            const newTask = { id: v1(), title: action.title, isDone: false };
+            return {
+                ...state,
+                [action.todoListId]: [...state[action.todoListId], newTask]
+            };
+        }
         default:
-            throw new Error("I don't understand this type")
+            throw new Error("I don't understand this type");
     }
-}
-
-export const removeTaskAC = (taskId: string,  todolistId: string): RemoveTaskActionType => {
-    return { type: 'REMOVE-TASK', taskId, todoListId} as const
-}
-export const addTaskC = (title: string): AddTaskActionType => {
-    return { type: ''}
 }
