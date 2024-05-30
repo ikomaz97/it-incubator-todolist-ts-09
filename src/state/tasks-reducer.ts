@@ -21,7 +21,29 @@ export type ChangeTaskStatusActionType = {
     todoListId: string
 }
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType;
+export type ChangeTaskTitleActionType = {
+    type: 'CHANGE-TASK-TITLE',
+    taskId: string,
+    newTitle: string,
+    todoListId: string
+}
+
+export type AddTodolistActionType = {
+    type: 'ADD-TODOLIST',
+    title: string
+}
+
+export type RemoveTodolistActionType = {
+    type: 'REMOVE-TODOLIST',
+    id: string
+}
+
+type ActionsType = RemoveTaskActionType
+    | AddTaskActionType
+    | ChangeTaskStatusActionType
+    | ChangeTaskTitleActionType
+    | AddTodolistActionType
+    | RemoveTodolistActionType;
 
 // Action creators
 export const removeTaskAC = (taskId: string, todoListId: string): RemoveTaskActionType => {
@@ -45,11 +67,21 @@ export const changeTaskStatusAC = (taskId: string, isDone: boolean, todoListId: 
     }
 }
 
-export type ChangeTaskTitleActionType = {
-    type: 'CHANGE-TASK-TITLE',
-    taskId: string,
-    title: string,
-    todoListId: string
+export const changeTaskTitleAC = (taskId: string, newTitle: string, todoListId: string): ChangeTaskTitleActionType => {
+    return {
+        type: 'CHANGE-TASK-TITLE',
+        taskId,
+        newTitle,
+        todoListId
+    }
+}
+
+export const addTodolistAC = (title: string): AddTodolistActionType => {
+    return { type: 'ADD-TODOLIST', title }
+}
+
+export const removeTodolistAC = (id: string): RemoveTodolistActionType => {
+    return { type: 'REMOVE-TODOLIST', id }
 }
 
 // Reducer
@@ -76,8 +108,26 @@ export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksS
                 )
             }
         }
-
-        case
+        case 'CHANGE-TASK-TITLE': {
+            return {
+                ...state,
+                [action.todoListId]: state[action.todoListId].map(task =>
+                    task.id === action.taskId ? { ...task, title: action.newTitle } : task
+                )
+            }
+        }
+        case 'ADD-TODOLIST': {
+            const newTodolistId = v1();
+            return {
+                ...state,
+                [newTodolistId]: []
+            }
+        }
+        case 'REMOVE-TODOLIST': {
+            const stateCopy = { ...state };
+            delete stateCopy[action.id];
+            return stateCopy;
+        }
         default:
             throw new Error("I don't understand this type");
     }
