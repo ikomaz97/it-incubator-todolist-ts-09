@@ -56,7 +56,7 @@ test('correct task should be added to correct array', () => {
     expect(endState['todolistId2'][0].isDone).toBe(false)
 })
 
-​test('status of specified task should be changed', () => {
+test('status of specified task should be changed', () => {
     const startState: TasksStateType = {
         'todolistId1': [
             {id: '1', title: 'CSS', isDone: false},
