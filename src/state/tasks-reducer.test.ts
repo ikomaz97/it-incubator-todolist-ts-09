@@ -49,7 +49,7 @@ test('correct task should be added to correct array', () => {
 
     const endState = taskReducer(startState, action)
 
-    expect(endState['todolistId1'].length).toBe(XXX)
+    expect(endState['todolistId1'].length).toBe(3)
     expect(endState['todolistId2'].length).toBe(XXX)
     expect(endState['todolistId2'][0].id).toBeDefined()
     expect(endState['todolistId2'][0].title).toBe(XXX)
