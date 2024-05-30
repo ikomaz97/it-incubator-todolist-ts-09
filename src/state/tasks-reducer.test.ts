@@ -1,4 +1,4 @@
-import {addTaskAC, removeTaskAC, taskReducer} from './tasks-reducer'
+import {addTaskAC, removeTaskAC, tasksReducer, changeTaskStatusAC} from './tasks-reducer'
 import { TasksStateType } from '../App'
 
 test('correct task should be deleted from correct array', () => {
@@ -17,7 +17,7 @@ test('correct task should be deleted from correct array', () => {
 
     const action = removeTaskAC('2', 'todolistId2')
 
-    const endState = taskReducer(startState, action)
+    const endState = tasksReducer(startState, action)
 
     expect(endState).toEqual({
         'todolistId1': [
@@ -47,7 +47,7 @@ test('correct task should be added to correct array', () => {
 
     const action = addTaskAC('juce', 'todolistId2')
 
-    const endState = taskReducer(startState, action)
+    const endState = tasksReducer(startState, action)
 
     expect(endState['todolistId1'].length).toBe(3)
     expect(endState['todolistId2'].length).toBe(4)
@@ -74,6 +74,28 @@ test('status of specified task should be changed', () => {
 
     const endState = tasksReducer(startState, action)
 
-    expect().toBe()
-    expect().toBe()
+    expect(endState['todolistId2'][1].isDone).toBe(false)
+    expect(endState['todolistId1'][1].isDone).toBe(true)
+})
+
+test('title of specified task should be changed', () => {
+    const startState: TasksStateType = {
+        'todolistId1': [
+            {id: '1', title: 'CSS', isDone: false},
+            {id: '2', title: 'JS', isDone: true},
+            {id: '3', title: 'React', isDone: false}
+        ],
+        'todolistId2': [
+            {id: '1', title: 'bread', isDone: false},
+            {id: '2', title: 'milk', isDone: true},
+            {id: '3', title: 'tea', isDone: false}
+        ]
+    }
+
+    const action = changeTaskTitleAC('2', 'JavaScript', 'todolistId2')
+
+    const endState = tasksReducer(startState, action)
+
+    expect(endState['todolistId2'][1].title).toBe('JavaScript')
+    expect(endState['todolistId1'][1].title).toBe('JS')
 })

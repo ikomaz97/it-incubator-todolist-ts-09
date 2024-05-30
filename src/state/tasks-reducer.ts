@@ -14,7 +14,14 @@ export type AddTaskActionType = {
     todoListId: string
 }
 
-type ActionsType = RemoveTaskActionType | AddTaskActionType;
+export type ChangeTaskStatusActionType = {
+    type: 'CHANGE-TASK-STATUS',
+    taskId: string,
+    isDone: boolean,
+    todoListId: string
+}
+
+type ActionsType = RemoveTaskActionType | AddTaskActionType | ChangeTaskStatusActionType;
 
 // Action creators
 export const removeTaskAC = (taskId: string, todoListId: string): RemoveTaskActionType => {
@@ -29,8 +36,24 @@ export const addTaskAC = (title: string, todoListId: string): AddTaskActionType 
     }
 }
 
+export const changeTaskStatusAC = (taskId: string, isDone: boolean, todoListId: string): ChangeTaskStatusActionType => {
+    return {
+        type: 'CHANGE-TASK-STATUS',
+        taskId,
+        isDone,
+        todoListId
+    }
+}
+
+export type ChangeTaskTitleActionType = {
+    type: 'CHANGE-TASK-TITLE',
+    taskId: string,
+    title: string,
+    todoListId: string
+}
+
 // Reducer
-export const taskReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
+export const tasksReducer = (state: TasksStateType, action: ActionsType): TasksStateType => {
     switch (action.type) {
         case 'REMOVE-TASK': {
             return {
@@ -39,12 +62,22 @@ export const taskReducer = (state: TasksStateType, action: ActionsType): TasksSt
             };
         }
         case 'ADD-TASK': {
-            const newTask = { id: Date.now().toString(), title: action.title, isDone: false };
+            const newTask = { id: v1(), title: action.title, isDone: false };
             return {
                 ...state,
                 [action.todoListId]: [newTask, ...state[action.todoListId]]
             }
         }
+        case 'CHANGE-TASK-STATUS': {
+            return {
+                ...state,
+                [action.todoListId]: state[action.todoListId].map(task =>
+                    task.id === action.taskId ? { ...task, isDone: action.isDone } : task
+                )
+            }
+        }
+
+        case
         default:
             throw new Error("I don't understand this type");
     }
