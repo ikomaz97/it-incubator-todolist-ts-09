@@ -22,7 +22,11 @@ export const removeTaskAC = (taskId: string, todoListId: string): RemoveTaskActi
 }
 
 export const addTaskAC = (title: string, todoListId: string): AddTaskActionType => {
-    return { type: 'ADD-TASK', title, todoListId };
+    return {
+        type: 'ADD-TASK',
+        title,
+        todoListId
+    }
 }
 
 // Reducer
@@ -35,11 +39,11 @@ export const taskReducer = (state: TasksStateType, action: ActionsType): TasksSt
             };
         }
         case 'ADD-TASK': {
-            const newTask = { id: v1(), title: action.title, isDone: false };
+            const newTask = { id: Date.now().toString(), title: action.title, isDone: false };
             return {
                 ...state,
-                [action.todoListId]: [...state[action.todoListId], newTask]
-            };
+                [action.todoListId]: [newTask, ...state[action.todoListId]]
+            }
         }
         default:
             throw new Error("I don't understand this type");
